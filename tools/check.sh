@@ -4,8 +4,8 @@
 #   sh tools/check.sh            scoring tests, Python compile check, and the capture smoke test
 #                                when the server answers on :8731 (start it with tools/serve.py)
 #
-# Simplification: a local script, not a CI service — the repo has no remote. With one, a workflow is
-# this file's three steps; capture.mjs would still need data/ (gitignored) on the runner.
+# Simplification: a local script, not a CI service. As a workflow it is this file's three steps;
+# on a fresh checkout the capture step runs against the committed sample in data/sample/.
 set -e
 cd "$(dirname "$0")/.."
 
