@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="hu"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>bestLocation</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+</head><body>
+<div id="map" role="application"></div>
+<div class="panel" id="left" role="region">
+  <h1>bestLocation<button id="lang">EN</button></h1>
+  <div class="sub" id="sub"></div>
+  <h2 id="h-area"></h2>
+  <label class="lab" for="anchor" id="l-anchor"></label>
+  <div class="row"><input id="anchor" list="anchors" autocomplete="off" spellcheck="false">
+    <datalist id="anchors"></datalist></div>
+  <label class="lab" for="anchor2" id="l-anchor2"></label>
+  <div class="row rowf"><input id="anchor2" list="anchors" autocomplete="off" spellcheck="false">
+    <button type="button" id="anchor2-x" hidden>×</button></div>
+  <div class="warnline" id="anchor-err" hidden></div>
+  <div class="row"><div class="lab"><b id="l-radius"></b>
+    <span class="wt"><span id="v-radius">90</span> km</span></div>
+    <input type="range" id="radius" aria-labelledby="l-radius" min="10" max="200" step="5" value="90" style="--accent:var(--amen)"></div>
+  <h2 id="h-land"></h2>
+  <div class="row rowf"><input id="landref" list="anchors" autocomplete="off" spellcheck="false">
+    <button class="q" data-note="land-note" aria-expanded="false">?</button></div>
+  <div class="hintline" id="land-note" hidden></div>
+  <h2 id="h-budget"></h2>
+  <div class="seg" id="kind" role="group"><button type="button" id="k-house" class="on" aria-pressed="true"></button><button type="button" id="k-flat" aria-pressed="false"></button></div>
+  <div class="row"><div class="lab"><b id="l-size"></b><span class="wt"><span id="v-size">120</span> m² <button class="q" data-note="area-note" aria-expanded="false">?</button></span></div>
+    <input type="range" id="size" aria-labelledby="l-size" min="30" max="200" step="10" value="120" style="--accent:var(--soil)"></div>
+  <div class="row"><div class="lab"><b id="l-budget"></b><span class="wt"><span id="v-budget">100</span> <span id="u-budget">M Ft</span></span></div>
+    <input type="range" id="budget" aria-labelledby="l-budget" min="30" max="200" step="5" value="100" style="--accent:var(--rail)"></div>
+  <div class="hintline" id="area-note" hidden></div>
+  <label class="chk" style="margin-top:6px"><input type="checkbox" id="areas" checked><span id="l-areas"></span></label>
+  <h2 id="h-view"></h2>
+  <div class="seg"><button id="v-s" class="on" aria-pressed="true"></button><button id="v-v" aria-pressed="false"></button></div>
+  <h2 id="h-must"></h2>
+  <div id="filters"></div>
+  <h2 id="h-profiles"></h2>
+  <div id="profiles"></div>
+  <h2 id="h-weights"></h2>
+  <div id="weights"></div>
+  <button id="srcbtn"></button>
+</div>
+<div class="panel" id="right" role="region">
+  <div id="report" hidden></div>
+  <div id="rhead2">
+    <input id="q" autocomplete="off" spellcheck="false">
+    <div id="count" aria-live="polite">Betöltés…</div>
+  </div>
+  <table id="tbl"><thead><tr><th scope="col" id="c1"></th><th scope="col" id="c2"></th><th scope="col" id="c3"></th><th scope="col" id="c4"></th><th scope="col" id="c5"></th><th scope="col" id="c6"></th><th scope="col" id="c7"></th><th scope="col" id="c8" hidden></th></tr></thead>
+  <tbody id="tbody"></tbody></table>
+  <div id="cmpbar" hidden><span id="cmp-n" aria-live="polite"></span>
+    <button type="button" id="cmp-clear"></button><button type="button" id="cmp-open" disabled></button></div>
+</div>
+<dialog id="cmp" aria-labelledby="cmp-h"></dialog>
+<div class="hint" id="hint"></div>
+<div class="legend"><span id="l-legend"></span><div class="ramp"></div>
+  <div class="rampx"><span id="l-low"></span><span id="l-high"></span></div>
+  <div class="szlab" id="szhint">Fill = score · circle = population</div>
+  <div class="sz">
+    <span><i style="width:9px;height:9px"></i>1k</span>
+    <span><i style="width:15px;height:15px"></i>10k</span>
+    <span><i style="width:24px;height:24px"></i>40k+</span>
+  </div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js"></script>
+<script src="lang.js"></script>
+<script src="sources.js"></script>
+<script src="config.js"></script>
+<script src="score.js"></script>
+<script src="app.js"></script>
+</body></html>

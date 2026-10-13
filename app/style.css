@@ -1,0 +1,254 @@
+*{scrollbar-width:thin;scrollbar-color:#3a3a3a transparent}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:5px;
+  border:2px solid var(--panel);background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:#4a4a4a;background-clip:padding-box;
+  border:2px solid var(--panel)}
+::-webkit-scrollbar-corner{background:transparent}
+:root{
+  --bg:#0e0e0e; --panel:#141414; --line:#262626; --hover:#1c1c1c;
+  --txt:#e9eff6; --txt2:#9a9999; --muted:#8a8a8a;
+  --leftw:290px; --rightw:452px;
+  --edu:#3ddc84; --health:#2ed3d3; --rail:#f5c542; --soil:#94d82d; --hazard:#ff4d4d; --amen:#9d7cff;
+}
+*{box-sizing:border-box}
+/* the top ramp stop, reserved for selection - the one pure-bright thing on screen */
+:focus-visible{outline:2px solid #fcfdbf;outline-offset:2px}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
+  font:13px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+#map{position:absolute;inset:0}
+.panel{position:absolute;top:0;bottom:0;background:var(--panel);border-color:var(--line);
+  overflow-y:auto;overflow-x:hidden;z-index:2}
+#left{left:0;width:var(--leftw);border-right:1px solid var(--line);padding:12px 14px}
+#right{right:0;width:var(--rightw);border-left:1px solid var(--line)}
+h1{font-size:14px;margin:0 0 2px;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:11px;margin-bottom:8px}
+h2{font-size:9.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--txt2);
+  margin:11px 0 5px;font-weight:600}
+.row{margin-bottom:4px}
+.lab{display:flex;justify-content:space-between;font-size:11px;color:var(--txt2);margin-bottom:1px}
+.lab b{color:var(--txt);font-weight:500}
+.wt{font-variant-numeric:tabular-nums;color:var(--muted);margin-left:6px}
+.dir{background:none;border:1px solid var(--line);color:var(--txt2);border-radius:4px;
+  font:10px Inter,sans-serif;padding:0 4px;cursor:pointer;line-height:14px}
+.dir:hover{background:var(--hover);color:var(--txt)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--line);
+  border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;
+  border-radius:50%;background:var(--accent,#f25a54);cursor:pointer;border:0}
+input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;
+  background:var(--accent,#f25a54);cursor:pointer;border:0}
+label.chk{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--txt2);
+  padding:1.5px 0;cursor:pointer}
+label.chk input{accent-color:var(--edu);width:13px;height:13px}
+#rhead2{position:sticky;top:0;background:var(--panel);z-index:2;
+  border-bottom:1px solid var(--line);padding:9px 14px 8px}
+#q{width:100%;background:#0f0f0f;border:1px solid var(--line);color:var(--txt);
+  border-radius:5px;font:12px Inter,sans-serif;padding:5px 7px}
+#q:focus{border-color:#3a3a3a}
+#count{color:var(--txt);font-size:11.5px;padding-top:7px}
+.warnline{color:#d98a86;font-size:10.5px;margin-top:4px;line-height:1.3}
+#count b{font-variant-numeric:tabular-nums}
+.bad b::before,.warn::before{content:"⚠ "}
+table{width:100%;border-collapse:collapse;font-size:11.5px;table-layout:auto}
+th{text-align:right;color:var(--muted);font-weight:500;font-size:9.5px;text-transform:uppercase;
+  letter-spacing:.05em;padding:7px 8px;border-bottom:1px solid var(--line);position:sticky;
+  top:66px;background:var(--panel);z-index:1}
+th:first-child,td:first-child{text-align:left}
+/* eight columns do not fit 404 px: tighten and shorten the name when the land column is on */
+table.land th,table.land td{padding-left:4px;padding-right:4px;font-size:11px}
+table.land td:first-child{max-width:120px}
+td{padding:6px 6px;border-bottom:1px solid #1a1a1a;font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+td:first-child{max-width:132px;overflow:hidden;text-overflow:ellipsis}
+tr.r{cursor:pointer}
+tr.r:hover td{background:var(--hover)}
+tr.fail td{opacity:.62}
+tr.fail td:first-child::after{content:" ✕";color:var(--hazard);font-size:10px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.maplibregl-ctrl-bottom-right{right:calc(var(--rightw) + 8px)!important}
+#report{padding:0 0 20px}
+#rhead{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);
+  padding:11px 14px;z-index:2}
+#rhead b{font-size:13px}
+#rhead .co{color:var(--muted);font-size:10.5px;font-variant-numeric:tabular-nums}
+.hintline{color:var(--muted);font-size:10px;line-height:1.35;margin:2px 0 6px;
+  border-left:2px solid var(--line);padding-left:7px}
+.q{background:none;border:1px solid var(--line);color:var(--muted);border-radius:50%;
+  width:14px;height:14px;line-height:11px;font-size:9px;padding:0;cursor:pointer;margin-left:5px}
+.q:hover{background:var(--hover);color:var(--txt)}
+#profiles{display:flex;flex-wrap:wrap;gap:4px}
+#profiles button{flex:1 1 auto;background:none;border:1px solid var(--line);color:var(--txt2);
+  border-radius:5px;font:10.5px Inter,sans-serif;padding:4px 7px;cursor:pointer}
+#profiles button:hover{background:var(--hover);color:var(--txt)}
+.grp{border-top:1px solid #1c1c1c;margin-top:6px}
+.grph{display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  padding:6px 0 4px;font-size:11px;color:var(--txt);user-select:none;
+  width:100%;background:none;border:0;font-family:inherit;text-align:left}
+.grph .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:10px}
+.grpb{padding-bottom:2px}
+/* #landref was left out and rendered as a white browser-default box on a dark panel */
+#anchor,#anchor2,#landref{width:100%;background:#0f0f0f;border:1px solid var(--line);color:var(--txt);
+  border-radius:5px;font:12px Inter,sans-serif;padding:5px 7px}
+#anchor:focus,#anchor2:focus,#landref:focus{border-color:#3a3a3a}
+.rowf{display:flex;align-items:center}
+.rowf #landref,.rowf #anchor2{flex:1;min-width:0}
+.seg{display:flex;gap:0;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;color:var(--muted);font:11px Inter,sans-serif;
+  padding:5px 4px;cursor:pointer}
+.seg button{border-bottom:2px solid transparent}
+.seg button.on{background:#2b2b2b;color:var(--txt);border-bottom-color:#f25a54;font-weight:500}
+#srcbtn{margin:16px 0 4px;width:100%;background:none;border:1px solid var(--line);
+  color:var(--muted);border-radius:5px;font:10.5px Inter,sans-serif;padding:5px;
+  cursor:pointer;letter-spacing:.04em}
+#srcbtn:hover{background:var(--hover);color:var(--txt2)}
+.src{padding:8px 14px 9px;border-bottom:1px solid #191919}
+.src b{display:block;font-size:11.5px;color:var(--txt);font-weight:500}
+.src .who{font-size:10.5px;color:var(--txt2);margin-top:2px}
+.src .meta{font-size:10px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+.fetched{color:var(--txt2)}
+.src .warn2{font-size:10px;color:#d98a86;margin-top:3px;line-height:1.35}
+#lang{float:right;background:none;border:1px solid var(--line);color:var(--txt2);
+  border-radius:5px;font:10px Inter,sans-serif;padding:2px 7px;cursor:pointer;letter-spacing:.06em}
+#lang:hover{background:var(--hover);color:var(--txt)}
+#back{background:none;border:1px solid var(--line);color:var(--txt2);border-radius:5px;
+  font:11px Inter,sans-serif;padding:3px 8px;cursor:pointer;float:right}
+#back:hover{background:var(--hover);color:var(--txt)}
+.sec{padding:9px 14px 3px;font-size:9.5px;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--txt2);font-weight:600}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:3px 14px;font-size:11.5px;
+  color:var(--txt2)}
+.kv b{color:var(--txt);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.note{padding:5px 14px;color:var(--muted);font-size:10.5px;line-height:1.4}
+.bad b{color:var(--hazard)}
+/* summaries open the report: one step above the panel, like a hovered row, so they read as
+   a distinct block without a new colour */
+.sum{background:var(--hover);border-bottom:1px solid var(--line);padding-bottom:9px}
+.sum h2.sec{margin:0}
+.sum p{margin:0;padding:0 14px;font-size:12px;line-height:1.5;color:var(--txt)}
+.sum ul{margin:6px 0 0;padding:0 14px 0 28px;font-size:11px;color:var(--txt2);overflow-wrap:anywhere}
+.sum a{color:var(--txt2)}
+.sum a:hover{color:var(--txt)}
+.sum .opnote,p.sum.opnote{margin-top:6px;font-size:10px;color:var(--muted)}
+p.sum.opnote{margin:0;padding:7px 14px}
+.wrow{padding:5px 14px 6px}
+.wtop{display:flex;justify-content:space-between;font-size:11.5px;color:var(--txt2)}
+.wtop b{color:var(--txt);font-weight:500}
+.wbar{height:5px;background:#1e1e1e;border-radius:3px;margin-top:4px;overflow:hidden}
+.wbar i{display:block;height:100%;border-radius:3px}
+.wmeta{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;
+  display:flex;justify-content:space-between;margin-top:3px}
+.hint{position:absolute;left:calc(var(--leftw) + 14px);top:14px;z-index:2;background:rgba(20,20,20,.9);
+  border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:11px;color:var(--txt2)}
+.legend{position:absolute;left:calc(var(--leftw) + 14px);bottom:14px;z-index:2;background:rgba(20,20,20,.92);
+  border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:10.5px;color:var(--txt2)}
+.ramp{width:172px;height:7px;border-radius:3px;margin:5px 0 3px;
+  background:linear-gradient(90deg,#7e1f81,#aa2c7a,#d33e68,#f25a54,#fe875a,#feb578)}
+.rampx{display:flex;justify-content:space-between;color:var(--muted)}
+.szlab{margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}
+.sz{display:flex;align-items:flex-end;gap:14px;margin-top:6px;color:var(--muted)}
+.sz span{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sz i{display:block;border-radius:50%;background:rgba(242,90,84,.75);
+  border:.6px solid var(--bg)}
+.maplibregl-popup-content{background:#141414;color:var(--txt);border:1px solid var(--line);
+  border-radius:6px;font:12px/1.5 Inter,sans-serif;padding:11px 13px}
+.maplibregl-popup-tip{border-top-color:#141414!important;border-bottom-color:#141414!important}
+.pop b{display:block;font-size:13px;margin-bottom:5px}
+.pop div{color:var(--txt2);font-variant-numeric:tabular-nums}
+.pop span{color:var(--txt);float:right;margin-left:14px}
+.ctx{display:block;clear:both;text-align:right;color:var(--muted);font-size:10px;
+  font-style:normal;font-variant-numeric:tabular-nums;margin-top:-1px}
+.kv .ctx{display:inline;margin-left:8px;text-align:right}
+.warn{color:var(--hazard)}
+
+/* 2: the settlement name is the row's control, so it must be a real button */
+.rowbtn{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;
+  cursor:pointer;text-align:left;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;display:block}
+/* 16: the score is a weighted mean, and a row that abstained on most of the weight
+   is not comparable to one that answered everything. */
+td.thin{color:var(--txt2)}
+.thinmark{font-style:normal;color:var(--hazard);margin-left:3px}
+#count .hintline{margin:5px 0 0}
+.hintline.nt{margin:0 14px 6px}
+#anchor-err{margin:2px 0 4px}
+
+/* workplaces: visible labels, the second one is optional and clearable */
+label.lab{display:block;margin:2px 0 2px}
+#anchor2-x{background:none;border:1px solid var(--line);color:var(--txt2);border-radius:5px;
+  font:13px Inter,sans-serif;width:26px;height:26px;margin-left:4px;cursor:pointer;padding:0}
+#anchor2-x:hover{background:var(--hover);color:var(--txt)}
+#kind{margin-bottom:6px}
+/* visually hidden, still read by screen readers */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* price reliability: a muted aside, never an alarm - half the priced rows carry it */
+.lowmark{font-style:normal;color:var(--muted);margin-right:1px}
+td.lowc{color:var(--txt2)}
+.txn{color:var(--muted);font-size:10px;font-weight:400}
+.lowtx{color:var(--muted);font-size:10px;font-weight:400;border-bottom:1px dotted var(--muted);cursor:help}
+.pop .txn,.pop .lowtx{float:right;clear:both;margin-left:6px}
+/* compare: checkbox in the name cell, a bar pinned to the bottom of the results */
+input.cmp{accent-color:var(--edu);width:12px;height:12px;margin:0 5px 0 0;vertical-align:middle;cursor:pointer}
+td:first-child .rowbtn{display:inline-block;vertical-align:middle;max-width:calc(100% - 18px)}
+#cmpbar{position:sticky;bottom:0;z-index:3;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  background:var(--panel);border-top:1px solid var(--line);padding:8px 14px;font-size:11px;color:var(--txt2)}
+#cmpbar[hidden]{display:none}
+#cmp-n{flex:1 1 150px}
+/* 300 bright boxes shout over the data; full strength only when checked or in use */
+input.cmp:not(:checked){opacity:.45}
+input.cmp:hover,input.cmp:focus-visible,tr.r:hover input.cmp{opacity:1}
+#cmpbar button,.acts button,#cmp-x{background:none;border:1px solid var(--line);color:var(--txt2);
+  border-radius:5px;font:11px Inter,sans-serif;padding:3px 8px;cursor:pointer}
+#cmpbar button:hover,.acts button:hover,#cmp-x:hover{background:var(--hover);color:var(--txt)}
+#cmp-open:not(:disabled){color:var(--txt);border-color:var(--edu)}
+#cmpbar button:disabled{opacity:.5;cursor:default}
+.acts{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:7px}
+.cmptog[aria-pressed="true"]{color:var(--txt);border-color:var(--edu)}
+.cmptog[aria-pressed="true"]::before{content:"✓ ";color:var(--edu)}
+.actmsg{font-size:10.5px;color:var(--muted);flex-basis:100%}
+.actmsg:empty{display:none}
+#cmp{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:0;
+  width:min(1180px,calc(100vw - 32px));max-width:none;max-height:calc(100vh - 48px);overflow:hidden}
+#cmp::backdrop{background:rgba(0,0,0,.6)}
+.cmph{padding:12px 14px 10px;border-bottom:1px solid var(--line)}
+.cmph h2{margin:0;font-size:13px;text-transform:none;letter-spacing:0;color:var(--txt)}
+.cmph .co{margin:3px 0 0;color:var(--muted);font-size:10.5px}
+#cmp-x{float:right}
+.cmpwrap{overflow:auto;max-height:calc(100vh - 130px)}
+table.cmpt{width:auto;min-width:100%;font-size:11.5px}
+.cmpt th,.cmpt td{text-align:left;vertical-align:top;padding:6px 10px;border-bottom:1px solid #1a1a1a;
+  white-space:normal;position:static;max-width:none;overflow:visible;text-transform:none;letter-spacing:0}
+.cmpt thead th{position:sticky;top:0;z-index:2;background:var(--panel);color:var(--txt);font-size:12px;
+  font-weight:500;min-width:150px;border-bottom:1px solid var(--line)}
+.cmpt thead td{position:sticky;top:0;left:0;z-index:3;background:var(--panel);border-bottom:1px solid var(--line)}
+.cmpt th[scope=row]{position:sticky;left:0;top:auto;z-index:1;background:var(--panel);color:var(--txt2);
+  font-size:11px;font-weight:500;min-width:120px;max-width:150px}
+.cmpt td{color:var(--txt2);font-variant-numeric:tabular-nums}
+.cmpt small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
+.cmpt thead small{font-weight:400}
+.cmpt td.best{color:var(--txt);font-weight:600;box-shadow:inset 2px 0 var(--edu)}
+.cmpt td.none{color:var(--muted)}
+.cmpt tr.wide td{min-width:220px;font-size:11px;line-height:1.45}
+.cmprm{float:right;background:none;border:1px solid var(--line);color:var(--muted);border-radius:4px;
+  font:12px Inter,sans-serif;width:20px;height:20px;padding:0;margin-left:6px;cursor:pointer}
+.cmprm:hover{background:var(--hover);color:var(--txt)}
+
+/* 22: under ~900px the two absolute panels overlap the map instead of sitting beside it */
+@media (max-width:900px){
+  :root{--leftw:0px;--rightw:0px}
+  html,body{height:auto}
+  body{display:flex;flex-direction:column;min-height:100%}
+  .panel,#left,#right{position:static;width:auto;overflow:visible;border:0}
+  #left{order:1;border-bottom:1px solid var(--line)}
+  #map{position:relative;inset:auto;order:2;height:320px;flex:none}
+  #right{order:3;border-top:1px solid var(--line)}
+  .hint,.legend{position:static;order:4;margin:8px 14px;background:var(--panel)}
+  .legend{order:5;margin-bottom:14px}
+  #rhead2{position:static}
+  th{top:0}
+  table.land th,table.land td{padding-left:6px;padding-right:6px}
+  td:first-child,table.land td:first-child{max-width:none}
+  /* the compare checkbox costs ~18px; tighter cells keep the table inside 400px */
+  th,td{padding-left:4px;padding-right:4px}
+}

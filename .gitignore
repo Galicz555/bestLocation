@@ -1,0 +1,27 @@
+node_modules/
+.venv/
+.npm/
+.pw-browsers/
+__pycache__/
+*.pyc
+
+# Fetched upstream data: ~1GB, all reproducible via tools/fetch_*.py
+data/raw/
+# Build products of tools/build_*.py — regenerate, don't diff
+data/out/*.npy
+data/out/app_data.json
+data/out/settlements.json
+data/out/settlements.csv
+data/out/boundaries*.json
+data/out/boundaries*.geojson
+
+*.png
+t.json
+data/out/fibre_unserved_addr.json
+data/out/commute/
+
+# The one raw file that cannot be regenerated: the one-off web-opinion research (see tools/fetch_opinions.py)
+!data/raw/
+data/raw/*
+!data/raw/opinions.json
+data/out/settlements.json.bak

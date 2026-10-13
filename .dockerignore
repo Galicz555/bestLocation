@@ -1,0 +1,9 @@
+data/
+.venv/
+node_modules/
+.npm/
+.pw-browsers/
+.git/
+__pycache__/
+*.pyc
+*.png
