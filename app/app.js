@@ -218,7 +218,9 @@ const CMP_ROWS=[
  {l:()=>t('r_frost','Frost pocket'), v:s=>s.frost_risk, dir:-1, fmt:x=>x+' / 100'},
  // a count of flags: fewer is better, but "3rd of 400 with no flag" is not a rank
  {l:()=>t('cmp_flood','Flood / water'), dir:-1, rank:false,
-  v:s=>[s.in_floodway,s.in_floodplain,s.in_waterlogged].filter(Boolean).length,
+  // no water layer at all (the sample dataset) is unknown, not "none"
+  v:s=>s.in_floodway==null&&s.in_floodplain==null&&s.in_waterlogged==null?null
+    :[s.in_floodway,s.in_floodplain,s.in_waterlogged].filter(Boolean).length,
   fmt:(x,s)=>x?[s.in_floodway&&t('sum_floodway','floodway'),s.in_floodplain&&t('sum_floodplain','floodplain basin'),
     s.in_waterlogged&&t('sum_wet','water-affected land')].filter(Boolean).join(', '):t('cmp_none','none')},
  {l:()=>t('cmp_poll','Nearest pollution source'), v:s=>s.pollution_nearest_km, dir:1, fmt:x=>fx1(x)+' km',
@@ -410,7 +412,8 @@ function renderReport(d,lat,lng){
     +` data-name="${esc(wname)}">${label}</button>`;
   const acts=`<div class="acts">${cmpBtn(rec)}${workBtn(0,t('work_here','Workplace here'))}`
     +`${workBtn(1,t('work2_here','2nd workplace here'))}<span class="actmsg" role="status"></span></div>`;
-  const yn=v=>v?t('yes','YES — avoid'):t('no','no');
+  // null = that layer is not loaded on the server (the sample dataset): kv() then skips the row
+  const yn=v=>v==null?null:v?t('yes','YES — avoid'):t('no','no');
   return head(esc(st.name||'Plot'),
     `${lat.toFixed(5)}, ${lng.toFixed(5)} · ${esc(st.megye||'')} · ${t('centre','village centre')} ${esc(d.settlement_km)} ${t('km','km')}`,acts)
    +summaryHtml(rec)
@@ -432,7 +435,7 @@ function renderReport(d,lat,lng){
    +kv(t('r_south','South-facing'),tr.south_facing)
    +kv(t('r_relief','Local relief'),tr.local_relief_m==null?null:tr.local_relief_m+' m')
    +kv(t('r_frost','Frost pocket'),tr.frost_risk==null?null:tr.frost_risk+' / 100',tr.frost_risk>=60)
-   +`<div class="sec">${t('s_water','Water')}</div>`
+   +(Object.values(w).some(v=>v!=null)?`<div class="sec">${t('s_water','Water')}</div>`:'')
    +kv(t('r_floodway','Floodway'),yn(w.floodway),w.floodway)
    +kv(t('r_floodplain','Floodplain basin'),yn(w.floodplain),w.floodplain)
    +kv(t('r_wet','Water-affected'),yn(w.waterlogged),w.waterlogged)
