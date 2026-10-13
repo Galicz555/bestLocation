@@ -127,6 +127,10 @@ const PROFILES={
  termeszet:{landscape_sim:2,garden_score:2,pm25_winter:2,pollution_nearest_km:2,
    frost_risk:1,commute_best_min:1,house_price_m2:1},
 };
+// English names for the group and profile ids; the Hungarian ones live in lang.js
+const NAMES_EN={g_csalad:'Family & school',g_ingatlan:'Property & price',g_kozlekedes:'Transport',
+  g_kert:'Garden & landscape',g_kornyezet:'Environment & safety',p_kertesz:'Gardener',
+  p_gyerekes:'Young family',p_ingazo:'Commuter',p_olcso:'On a budget',p_termeszet:'Close to nature'};
 function applyProfile(id){
   const P=PROFILES[id]; if(!P) return;
   for(const m of METRICS) m.w = P[m.k] || 0;
@@ -642,13 +646,13 @@ function buildUI(){
     // unreachable by keyboard, so those sliders were unreachable too.
     return `<div class="grp"><button type="button" class="grph" data-g="${g}"
         aria-expanded="${open[g]?'true':'false'}">
-        <span>${open[g]?'▾':'▸'} ${t('g_'+g,g)}</span>
+        <span>${open[g]?'▾':'▸'} ${t('g_'+g,NAMES_EN['g_'+g])}</span>
         <span class="n">${act}/${ms.length}</span></button>
       <div class="grpb" ${open[g]?'':'hidden'}>${ms.map(rowHtml).join('')}</div></div>`;
   }).join('');
   document.getElementById('profiles').innerHTML=
     ['kertesz','gyerekes','ingazo','olcso','termeszet']
-      .map(id=>`<button data-p="${id}">${t('p_'+id,id)}</button>`).join('');
+      .map(id=>`<button data-p="${id}">${t('p_'+id,NAMES_EN['p_'+id])}</button>`).join('');
   // house size and budget: these live outside the weight groups, so they must be
   // rebound here every time buildUI() redraws the panel
   for(const [id,k] of [['size','size'],['budget','budget']]){
@@ -662,7 +666,7 @@ function buildUI(){
   document.querySelectorAll('.grph').forEach(h=>h.onclick=()=>{
     const g=h.dataset.g; open[g]=!open[g];
     localStorage.setItem('bl_groups',JSON.stringify(open));
-    h.querySelector('span').textContent=(open[g]?'▾ ':'▸ ')+t('g_'+g,g);
+    h.querySelector('span').textContent=(open[g]?'▾ ':'▸ ')+t('g_'+g,NAMES_EN['g_'+g]);
     h.setAttribute('aria-expanded',open[g]?'true':'false');
     h.nextElementSibling.hidden=!open[g];
   });
@@ -681,6 +685,7 @@ function buildUI(){
     pct=percentiles(DATA); render();});
 }
 
+document.getElementById('count').textContent=t('loading','Loading…');
 fetch('/data/out/source_dates.json').then(r=>r.json()).then(d=>{SRCDATES=d;}).catch(()=>{});
 fetch('/data/out/app_data.json').then(r=>{
   if(!r.ok) throw new Error('HTTP '+r.status);

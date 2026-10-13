@@ -10,11 +10,12 @@ import { dirname, join } from 'node:path';
 
 const APP = join(dirname(fileURLToPath(import.meta.url)), '..', 'app');
 const src = f => readFileSync(join(APP, f), 'utf8');
-// lang.js reads localStorage at load; an empty one is the browser's first-visit state (Hungarian).
-const load = () => new Function('localStorage',
+// lang.js reads localStorage and navigator.language at load: an empty store is a first visit,
+// and the suite runs as a Hungarian browser unless a test passes another language.
+const load = (language = 'hu-HU') => new Function('localStorage', 'navigator',
   src('lang.js') + '\n' + src('config.js') + '\n' + src('score.js') +
   '\nreturn {METRICS,FILTERS,UI,HU,percentiles,score,passes,valueResidual,summarize,kf,costOf,lowTx,LOW_TX,' +
-  'setPct:v=>{pct=v},getPct:()=>pct,setLang:v=>{LANG=v}};')({getItem: () => null});
+  'setPct:v=>{pct=v},getPct:()=>pct,setLang:v=>{LANG=v},getLang:()=>LANG};')({getItem: () => null}, {language});
 
 // Only these metrics are on, so an expected score can be computed by hand.
 const only = (S, weights) => {
@@ -323,6 +324,14 @@ ok('summary: the English fallback is complete', () => {
   assert.ok(txt.includes('its strength is cheaper housing') && txt.includes('more polluted winter air')
     && txt.includes('Watch out: frost pocket.'), txt);
   assert.ok(!/[őűáé]/.test(txt), `Hungarian leaked into English: ${txt}`);
+});
+
+ok('first visit follows the browser language: Hungarian only for a Hungarian browser', () => {
+  assert.equal(load('hu-HU').getLang(), 'hu');
+  assert.equal(load('hu').getLang(), 'hu');
+  assert.equal(load('en-GB').getLang(), 'en');
+  assert.equal(load('de-DE').getLang(), 'en');
+  assert.equal(load('').getLang(), 'en');
 });
 
 console.log(`\n${checks} checks passed`);
