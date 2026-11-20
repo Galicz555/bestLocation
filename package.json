@@ -1,16 +1,13 @@
 {
   "name": "bestlocation",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
+  "private": true,
+  "description": "Ranks Hungarian settlements by a user-weighted mix of public metrics",
+  "license": "MIT",
   "type": "commonjs",
+  "scripts": {
+    "test": "node tools/test_score.mjs"
+  },
   "dependencies": {
     "playwright": "^1.62.1"
   }

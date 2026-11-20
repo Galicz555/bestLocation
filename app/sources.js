@@ -27,7 +27,7 @@ const SOURCES=[
   warn_en:'Hazard indicators, NOT EU Floods Directive return periods. The official 100-year rasters were unreachable.',
   warn_hu:'Veszélyeztetettségi jelzések, NEM az árvízi irányelv szerinti visszatérési idők. A hivatalos rasztereket nem lehetett elérni.'},
  {id:'gtfs', en:'Rail and Budapest transit timetables', hu:'Vasúti és budapesti közösségi közlekedési menetrend',
-  who:'MÁV-START · GYSEV · BKK / MÁV-HÉV (GTFS)', meta:'MÁV 2026-05-01 – 2027-03-01 · BKK daily · CC0',
+  who:'MÁV-START · GYSEV · BKK / MÁV-HÉV (GTFS)', meta:'MÁV 2026-05-01 – 2027-03-01 · BKK daily · licence not confirmed',
   warn_en:'Best scheduled morning journey (arrive 06:00–09:00) with at most one change; waiting time between departures is not counted. Walks start at the settlement centre, not your street. Volánbusz suburban buses are not included.',
   warn_hu:'A legjobb menetrend szerinti reggeli út (érkezés 06:00–09:00), legfeljebb egy átszállással; a járatok közti várakozás nincs beszámítva. A gyaloglás a település központjától indul, nem az utcától. A Volánbusz elővárosi buszai nincsenek benne.'},
  {id:'fibre', en:'Fixed broadband coverage, address level', hu:'Vezetékes szélessáv-lefedettség, címszinten',
@@ -67,8 +67,6 @@ const SOURCES=[
  {id:'base', credit:"Demo basemap: Protomaps · © OpenStreetMap contributors (ODbL).", en:'Basemap', hu:'Alaptérkép',
   who:'OpenFreeMap · OpenMapTiles · OpenStreetMap', meta:'ODbL',
   who_demo:'Protomaps · OpenStreetMap contributors'},
- {id:'geo', en:'Address search', hu:'Címkeresés',
-  who:'Nominatim · OpenStreetMap', meta:'ODbL'},
 ];
 const MISSING=[
  {en:'Income', hu:'Jövedelem', why_en:'NAV publishes nothing per settlement; TeIR requires registration. Proxied by education and unemployment.',
