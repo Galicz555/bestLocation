@@ -7,7 +7,7 @@
 The settlement map ranks villages. This answers the question a village-level score
 cannot: is THIS garden any good. Same sources, sampled at the point.
 """
-import argparse, json, math, sys, urllib.parse, urllib.request
+import argparse, json, math, os, sys, urllib.parse, urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -21,6 +21,9 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW, OUT = ROOT / "data/raw", ROOT / "data/out"
 UA = "bestLocation/0.1 (personal house-search tool)"
 DRIVE_KMH, PARK_MIN, EGRESS_MIN = 40.0, 5, 15
+# The soil sample is a live call to the TAKI server, whose licence is undeclared: off unless
+# asked for. Without it the report's garden section says the soil source is unavailable.
+SOIL_LIVE = os.environ.get("SOIL_LIVE") == "1"
 
 
 def haversine(a, b):
@@ -91,7 +94,10 @@ _stations = []
 
 def rail(lat, lon):
     if not _stations:
-        _stations.extend(json.loads((OUT / "rail_stations.json").read_text(encoding="utf-8")))
+        f = OUT / "rail_stations.json"                 # absent from the sample dataset
+        if not f.exists():
+            return None
+        _stations.extend(json.loads(f.read_text(encoding="utf-8")))
     st = _stations
     best = None
     for s in st:
@@ -156,7 +162,7 @@ def _try(fn, *a):
 
 
 def collect(lat, lon):
-    soil = _try(fetch_soil.sample, lon, lat)
+    soil = _try(fetch_soil.sample, lon, lat) if SOIL_LIVE else {}
     tex = fetch_soil.usda(soil.get("soil_sand_pct"), soil.get("soil_silt_pct"),
                           soil.get("soil_clay_pct"))
     ter = _try(fetch_terrain.terrain, lat, lon)

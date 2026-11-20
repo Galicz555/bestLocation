@@ -403,6 +403,28 @@ def for_settlements(anchor_lat, anchor_lon, spine):
     return out
 
 
+def has_timetable():
+    return (GTFS / "stops.txt").exists()
+
+
+def road_only(anchor_lat, anchor_lon, spine):
+    """ksh -> commute record from the road estimate alone, for a checkout without the
+    timetables (a fresh clone). Simplification: the same 55 km/h crow-flies proxy that
+    for_settlements() falls back to when no train or transit route exists."""
+    out = {}
+    for s in spine:
+        if not s.get("lat"):
+            continue
+        d = haversine((anchor_lat, anchor_lon), (s["lat"], s["lon"]))
+        road = round(d / ROAD_KMH * 60 + ROAD_OVERHEAD_MIN)
+        out[s["ksh"]] = {"dist_km": round(d, 1), "drive_min_est": road, "commute_min": None,
+                         "rail_station": None, "rail_station_km": None, "rail_min": None,
+                         "rail_trains_am": 0, "rail_terminus": None, "transit_min": None,
+                         "transit_stop": None, "transit_walk_km": None, "transit_line": None,
+                         "commute_best_min": road, "commute_mode": "road"}
+    return out
+
+
 def feed_version():
     """Stamp for the cache key, so replacing the timetable retires every cached anchor.
     Simplification: mtimes of the MAV files and the BKK zip — GTFS feed_info.txt is optional and
@@ -413,6 +435,8 @@ def feed_version():
 
 
 def cached(anchor_lat, anchor_lon, spine):
+    if not has_timetable():
+        return road_only(anchor_lat, anchor_lon, spine)
     network()                                   # downloads the BKK feed feed_version stamps
     CACHE.mkdir(parents=True, exist_ok=True)
     # MODEL_V retires cached anchors when the commute rules change, as feed_version does for the timetable
