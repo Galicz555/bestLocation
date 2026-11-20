@@ -1,0 +1,8 @@
+# Runtime only — what tools/serve.py actually imports at request time.
+# The serve path is: serve -> plot_report -> fetch_soil/fetch_terrain/fetch_pollution, commute.
+# rasterio (115MB, bundles GDAL), pyproj (33MB, bundles PROJ), openpyxl, pyshp and requests
+# are imported ONLY by the build-time fetch_*/build_* scripts, which run on the host.
+# Full host/build set stays in requirements.txt. Keep the pins in the two files in sync.
+numpy==2.5.2
+pillow==12.3.0
+shapely==2.1.2
