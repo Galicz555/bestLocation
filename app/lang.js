@@ -1,6 +1,7 @@
 
 const LANG_KEY='bl_lang';
-let LANG=localStorage.getItem(LANG_KEY)||'hu';
+// first visit: Hungarian for a Hungarian browser, English for every other; the toggle then sticks
+let LANG=localStorage.getItem(LANG_KEY)||(/^hu\b/i.test(navigator.language||'')?'hu':'en');
 const HU={
  h_budget:'Költségvetés', h_must:'Kötelező', h_weights:'Súlyok',
  l_size:'Alapterület', l_budget:'Max. költségvetés', u_budget:'M Ft',
